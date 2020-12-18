@@ -1,0 +1,804 @@
+<html>
+<head>
+  <title>Experiment</title>
+  <script src="jspsych-6/jspsych.js"></script>
+  <script src="jspsych-6/plugins/jspsych-html-button-response.js"></script>
+  <link href="jspsych-6/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+  <script src="speech-commands.js"></script>
+  <script src = "html-mic-button-load.js"></script>
+  <script src = "html-mic-button-response.js"></script>
+
+  <style type="text/css">
+      .hidden {
+          display: none;
+      }
+
+      .active {
+          background-color: #090;
+      }
+  </style>
+</head>
+<body>
+  <script type="text/javascript">
+
+  var modelLoaded = false;
+  let recognizer;
+  let words;
+  const wordList = ["zero","one","two","three","four","five","six","seven","eight","nine", "yes", "no", "up", "down", "left", "right", "stop", "go"];
+
+  var guessWord = "";
+
+   function getResults(correctWord){
+    if(guessWord == correctWord){
+return true;
+    }
+    else{
+    return false;
+    }
+  }; 
+
+
+  var timeline = [];
+
+  var welcome = {
+    type: "html-mic-button-load",
+    stimulus: '<p>Welcome to the experiment.</p>' + '<p> For the first half of this experiment, non-number words will appear on the screen. Please repeat into your microphone the number of words that appear on the screen.</p>',
+
+    choices: ['Continue'],
+    margin_vertical: '20px',
+
+  };
+  timeline.push(welcome);
+
+      var trial1 = {
+type: "html-mic-button-response",
+stimulus: '<p>Dog</p>' + '<p>Dog</p>' + '<p>Dog</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+on_finish: function(data){
+  //alert(guessWord);
+  //alert(wordList[3]);
+  data.correct = getResults(wordList[3]);
+//  stopListening();
+},
+};
+timeline.push(trial1);
+
+var trial2 = {
+type: "html-mic-button-response",
+stimulus: '<p>Button</p>' + '<p>Button</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[2]);
+
+},
+};
+timeline.push(trial2);
+
+var trial3 = {
+type: "html-mic-button-response",
+stimulus: '<p>Hat</p>' + '<p>Hat</p>' + '<p>Hat</p>' + '<p>Hat</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[4]);
+
+},
+};
+timeline.push(trial3);
+
+var trial4 = {
+type: "html-mic-button-response",
+stimulus: '<p>College</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[1]);
+
+},
+};
+timeline.push(trial4);
+
+var trial5 = {
+type: "html-mic-button-response",
+stimulus: '<p>Funny</p>' + '<p>Funny</p>' + '<p>Funny</p>' + '<p>Funny</p>' + '<p>Funny</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[5]);
+
+},
+};
+timeline.push(trial5);
+
+var trial6 = {
+type: "html-mic-button-response",
+stimulus: '<p>Bag</p>' + '<p>Bag</p>' + '<p>Bag</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[3]);
+
+},
+};
+timeline.push(trial6);
+
+var trial7 = {
+type: "html-mic-button-response",
+stimulus: '<p>Love</p>' + '<p>Love</p>' + '<p>Love</p>' + '<p>Love</p>' + '<p>Love</p>' + '<p>Love</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[6]);
+
+},
+};
+timeline.push(trial7);
+
+var trial8 = {
+type: "html-mic-button-response",
+stimulus: '<p>Man</p>' + '<p>Man</p>' + '<p>Man</p>' + '<p>Man</p>' + '<p>Man</p>' + '<p>Man</p>' + '<p>Man</p>' + '<p>Man</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[8]);
+
+},
+};
+timeline.push(trial8);
+
+var trial9 = {
+type: "html-mic-button-response",
+stimulus: '<p>Woman</p>' + '<p>Woman</p>' + '<p>Woman</p>' + '<p>Woman</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[4]);
+
+},
+};
+timeline.push(trial9);
+
+var trial10 = {
+type: "html-mic-button-response",
+stimulus: '<p>Sunday</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[1]);
+
+},
+};
+timeline.push(trial10);
+
+var trial11 = {
+type: "html-mic-button-response",
+stimulus: '<p>Baby</p>' + '<p>Baby</p>' + '<p>Baby</p>' + '<p>Baby</p>' + '<p>Baby</p>' + '<p>Baby</p>' + '<p>Baby</p>' + '<p>Baby</p>' + '<p>Baby</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[9]);
+
+},
+};
+timeline.push(trial11);
+
+var trial12 = {
+type: "html-mic-button-response",
+stimulus: '<p>Fortunate</p>' + '<p>Fortunate</p>' + '<p>Fortunate</p>' + '<p>Fortunate</p>' + '<p>Fortunate</p>' + '<p>Fortunate</p>' + '<p>Fortunate</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[7]);
+
+},
+};
+timeline.push(trial12);
+
+var trial13 = {
+type: "html-mic-button-response",
+stimulus: '<p>Keep</p>' + '<p>Keep</p>' + '<p>Keep</p>' + '<p>Keep</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[4]);
+
+},
+};
+timeline.push(trial13);
+
+var trial14 = {
+type: "html-mic-button-response",
+stimulus: '<p>Lamp</p>' + '<p>Lamp</p>' + '<p>Lamp</p>' + '<p>Lamp</p>' + '<p>Lamp</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[5]);
+
+},
+};
+timeline.push(trial14);
+
+var trial15 = {
+type: "html-mic-button-response",
+stimulus: '<p>Box</p>' + '<p>Box</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[2]);
+
+},
+};
+timeline.push(trial15);
+
+var trial16 = {
+type: "html-mic-button-response",
+stimulus: '<p>Book</p>' + '<p>Book</p>' + '<p>Book</p>' + '<p>Book</p>' + '<p>Book</p>' + '<p>Book</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[6]);
+
+},
+};
+timeline.push(trial16);
+
+var trial17 = {
+type: "html-mic-button-response",
+stimulus: '<p>Race</p>' + '<p>Race</p>' + '<p>Race</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[3]);
+
+},
+};
+timeline.push(trial17);
+
+var trial18 = {
+type: "html-mic-button-response",
+stimulus: '<p>Leg</p>' + '<p>Leg</p>' + '<p>Leg</p>' + '<p>Leg</p>' + '<p>Leg</p>' + '<p>Leg</p>' + '<p>Leg</p>' + '<p>Leg</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[8]);
+
+},
+};
+timeline.push(trial18);
+
+var trial19 = {
+type: "html-mic-button-response",
+stimulus: '<p>Shrimp</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[1]);
+
+},
+};
+timeline.push(trial19);
+
+var trial20 = {
+type: "html-mic-button-response",
+stimulus: '<p>Coat</p>' + '<p>Coat</p>' + '<p>Coat</p>' + '<p>Coat</p>' + '<p>Coat</p>' + '<p>Coat</p>' + '<p>Coat</p>' + '<p>Coat</p>' + '<p>Coat</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[9]);
+
+},
+};
+timeline.push(trial20);
+
+var secondHalf = {
+type: "html-mic-button-response",
+stimulus: '<p>In the second half of this experiment, you will be presented with number words.</p>' + '<p>For each trial, please repeat into your microphone the number of words that appear on the screen, not what the word says</p>',
+
+choices: ['Continue'],
+margin_vertical: '20px',
+
+};
+
+timeline.push(secondHalf);
+
+var trial21 = {
+type: "html-mic-button-response",
+stimulus: '<p>One</p>' + '<p>One</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_load: function(data){
+startListening();
+},
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[2]);
+
+},
+};
+timeline.push(trial21);
+
+var trial22 = {
+type: "html-mic-button-response",
+stimulus: '<p>Nine</p>' + '<p>Nine</p>' + '<p>Nine</p>' + '<p>Nine</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_load: function(data){
+startListening();
+},
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[4]);
+
+},
+};
+timeline.push(trial22);
+
+var trial23 = {
+type: "html-mic-button-response",
+stimulus: '<p>Seven</p>' + '<p>Seven</p>' + '<p>Seven</p>' + '<p>Seven</p>' + '<p>Seven</p>' + '<p>Seven</p>' + '<p>Seven</p>' + '<p>Seven</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_load: function(data){
+startListening();
+},
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[8]);
+
+},
+};
+timeline.push(trial23);
+
+var trial24 = {
+type: "html-mic-button-response",
+stimulus: '<p>Three</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_load: function(data){
+startListening();
+},
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[1]);
+
+},
+};
+timeline.push(trial24);
+
+var trial25 = {
+type: "html-mic-button-response",
+stimulus: '<p>Eight</p>' + '<p>Eight</p>' + '<p>Eight</p>' + '<p>Eight</p>' + '<p>Eight</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_load: function(data){
+startListening();
+},
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[5]);
+
+},
+};
+timeline.push(trial25);
+
+var trial26 = {
+type: "html-mic-button-response",
+stimulus: '<p>Two</p>' + '<p>Two</p>' + '<p>Two</p>' + '<p>Two</p>' + '<p>Two</p>' + '<p>Two</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_load: function(data){
+startListening();
+},
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[6]);
+
+},
+};
+timeline.push(trial26);
+
+var trial27 = {
+type: "html-mic-button-response",
+stimulus: '<p>Zero</p>' + '<p>Zero</p>' + '<p>Zero</p>' + '<p>Zero</p>' + '<p>Zero</p>' + '<p>Zero</p>' + '<p>Zero</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_load: function(data){
+startListening();
+},
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[7]);
+
+},
+};
+timeline.push(trial27);
+
+var trial28 = {
+type: "html-mic-button-response",
+stimulus: '<p>Six</p>' + '<p>Six</p>' + '<p>Six</p>' + '<p>Six</p>' + '<p>Six</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_load: function(data){
+startListening();
+},
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[5]);
+
+},
+};
+timeline.push(trial28);
+
+var trial29 = {
+type: "html-mic-button-response",
+stimulus: '<p>Four</p>' + '<p>Four</p>' + '<p>Four</p>' + '<p>Four</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_load: function(data){
+startListening();
+},
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[4]);
+
+},
+};
+timeline.push(trial29);
+
+var trial30 = {
+type: "html-mic-button-response",
+stimulus: '<p>Five</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_load: function(data){
+startListening();
+},
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[1]);
+
+},
+};
+timeline.push(trial30);
+
+var trial31 = {
+type: "html-mic-button-response",
+stimulus: '<p>Six</p>' + '<p>Six</p>' + '<p>Six</p>' + '<p>Six</p>' + '<p>Six</p>' + '<p>Six</p>' + '<p>Six</p>' + '<p>Six</p>' + '<p>Six</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_load: function(data){
+startListening();
+},
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[9]);
+
+},
+};
+timeline.push(trial31);
+
+var trial32 = {
+type: "html-mic-button-response",
+stimulus: '<p>Two</p>' + '<p>Two</p>' + '<p>Two</p>' + '<p>Two</p>' + '<p>Two</p>' + '<p>Two</p>' + '<p>Two</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_load: function(data){
+startListening();
+},
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[7]);
+
+},
+};
+timeline.push(trial32);
+
+var trial33 = {
+type: "html-mic-button-response",
+stimulus: '<p>Three</p>' + '<p>Three</p>' + '<p>Three</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_load: function(data){
+startListening();
+},
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[3]);
+
+},
+};
+timeline.push(trial33);
+
+var trial34 = {
+type: "html-mic-button-response",
+stimulus: '<p>Seven</p>' + '<p>Seven</p>' + '<p>Seven</p>' + '<p>Seven</p>' + '<p>Seven</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_load: function(data){
+startListening();
+},
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[5]);
+
+},
+};
+timeline.push(trial34);
+
+var trial35 = {
+type: "html-mic-button-response",
+stimulus: '<p>Four</p>' + '<p>Four</p>' + '<p>Four</p>' + '<p>Four</p>' + '<p>Four</p>' + '<p>Four</p>' + '<p>Four</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_load: function(data){
+startListening();
+},
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[7]);
+
+},
+};
+timeline.push(trial35);
+
+var trial36 = {
+type: "html-mic-button-response",
+stimulus: '<p>Nine</p>' + '<p>Nine</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_load: function(data){
+startListening();
+},
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[2]);
+
+},
+};
+timeline.push(trial36);
+
+var trial37 = {
+type: "html-mic-button-response",
+stimulus: '<p>Eight</p>' + '<p>Eight</p>' + '<p>Eight</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_load: function(data){
+startListening();
+},
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[3]);
+
+},
+};
+timeline.push(trial37);
+
+var trial38 = {
+type: "html-mic-button-response",
+stimulus: '<p>Three</p>' + '<p>Three</p>' + '<p>Three</p>' + '<p>Three</p>' + '<p>Three</p>' + '<p>Three</p>' + '<p>Three</p>' + '<p>Three</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_load: function(data){
+startListening();
+},
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[8]);
+
+},
+};
+timeline.push(trial38);
+
+var trial39 = {
+type: "html-mic-button-response",
+stimulus: '<p>Six</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_load: function(data){
+startListening();
+},
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[1]);
+
+},
+};
+timeline.push(trial39);
+
+var trial40 = {
+type: "html-mic-button-response",
+stimulus: '<p>One</p>' + '<p>One</p>' + '<p>One</p>' + '<p>One</p>' + '<p>One</p>' + '<p>One</p>' + '<p>One</p>' + '<p>One</p>' + '<p>One</p>',
+
+choices: ['Next'],
+margin_vertical: '20px',
+
+
+on_load: function(data){
+startListening();
+},
+
+on_finish: function(data){
+
+data.correct = getResults(wordList[9]);
+
+},
+};
+timeline.push(trial40);
+
+var trial41 = {
+type: "html-mic-button-response",
+stimulus: "<p>You have completed the experiment. Thank you for participating!</p>"
+};
+timeline.push(trial40);
+
+jsPsych.init({
+timeline: timeline
+});
+</script>
+</body>
+</html>
