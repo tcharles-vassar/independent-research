@@ -19,7 +19,8 @@ var modelLoaded = false;
 let recognizer;
 let transferRecognizer;
 let words;
-const wordList = ["zero","one","two","three","four","five","six","seven","eight","nine", "yes", "no", "up", "down", "left", "right", "stop", "go", "red"];
+//const wordList = ["zero","one","two","three","four","five","six","seven","eight","nine", "yes", "no", "up", "down", "left", "right", "stop", "go", "red"];
+const wordList = ["red"];
 const collectExampleOptions = {};
 
 async function loadTransfer() {
@@ -77,6 +78,8 @@ async function transferBN() {
 };
 
 function getResults(correctWord){
+  alert(guessWord);
+  alert(correctWord);
  if(guessWord == correctWord){
 return true;
  }
@@ -900,7 +903,7 @@ timeline.push(transfer_red8);
     margin_vertical: '20px',
 
     on_finish: function(data){
-      data.correct = getResults('red');
+      data.correct = getResults(wordList[0]);
     },
   };
 
