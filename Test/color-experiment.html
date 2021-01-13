@@ -30,7 +30,7 @@ async function loadTransfer() {
     recognizer = speechCommands.create("BROWSER_FFT");
     await recognizer.ensureModelLoaded()
 
-    transferRecognizer = recognizer.createTransfer('modelName');
+    transferRecognizer = recognizer.createTransfer('colors');
 
 };
 
@@ -76,6 +76,17 @@ async function transferBN() {
   transferRecognizer.ensureModelLoaded();
   const bn = await transferRecognizer.collectExample('_background_noise_', collectExampleOptions);
 };
+
+async function trainNew(){
+  await transferRecognizer.train({
+  epochs: 40,
+  callback: {
+    onEpochEnd: async (epoch, logs) => {
+      console.log(`Epoch ${epochs}: loss=${logs.loss}, accuracy=${logs.acc}`);
+    }
+  }
+});
+}
 
 function getResults(correctWord){
   alert(guessWord);
@@ -800,6 +811,7 @@ timeline.push(transfer_red7);
 
   on_finish: function(){
     transferRed();
+    trainNew();
   },
 };
 
@@ -904,6 +916,7 @@ timeline.push(transfer_red8);
 
     on_finish: function(data){
       data.correct = getResults(wordList[0]);
+
     },
   };
 

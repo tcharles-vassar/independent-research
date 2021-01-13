@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Experiment</title>
+  <script src="jspsych-6/jspsych.js"></script>
+  <script src="jspsych-6/plugins/jspsych-html-keyboard-response.js"></script>
+  <script src="jspsych-6/plugins/jspsych-html-button-response.js"></script>
+  <script src="jspsych-6/plugins/jspsych-survey-text.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+  <script src = "html-mic-button-load.js"></script>
+  <script src = "html-mic-button-response.js"></script>
+  <script src="speech-commands.js"></script>
+  <link href="jspsych-6/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+</head>
+<body></body>
+<script>
+
+  var modelLoaded = false;
+  let recognizer;
+  let words;
+
+  async function loadTransfer() {
+
+      // When calling `create()`, you must provide the type of the audio input.
+      // - BROWSER_FFT uses the browser's native Fourier transform.
+      recognizer = speechCommands.create("BROWSER_FFT");
+      await recognizer.ensureModelLoaded()
+
+      transferRecognizer = recognizer.createTransfer('colors');
+
+  };
+
+  loadTransfer();
+
+const candidateWords = recognizer.wordLabels()
+console.log(candidateWords);
+
+recognizer
+      .startStreaming(
+          result => {
+            for (let i = 0; i < candidateWords.length; ++i) {
+              wordsAndProbs.push({ word: candidateWords[i], prob: result.scores[i]});
+            }
+            wordsAndProbs.sort((a, b) => (b.prob - a.prob));
+            const topGuess = wordsAndProbs[0].word;
+            console.log(topGuess);
+          },
+          {
+            includeSpectrogram: true,
+            probabilityThreshold: Number.parseFloat(probaThresholdInput.value)
+          })
+      .then(() => {
+        console.log('Stream started');
+      })
+      .catch(err => {
+        console.log('Failed to start streaming: ' + err.message);
+      });
+
+const transferRecognizer = recognizer.createTransfer('colors');
+
+async function trainNew(){
+  await transferRecognizer.train({
+  epochs: 40,
+  callback: {
+    onEpochEnd: async (epoch, logs) => {
+      console.log(`Epoch ${epochs}: loss=${logs.loss}, accuracy=${logs.acc}`);
+    }
+  }
+});
+};
+
+async function transferRed() {
+  transferRecognizer.ensureModelLoaded();
+  const red = await transferRecognizer.collectExample('red', collectExampleOptions);
+  //wordList.add('red');
+};
+
+async function transferOrange() {
+  transferRecognizer.ensureModelLoaded();
+  const orange = await transferRecognizer.collectExample('orange', collectExampleOptions);
+};
+
+async function transferYellow() {
+  transferRecognizer.ensureModelLoaded();
+  const yellow = await transferRecognizer.collectExample('yellow', collectExampleOptions);
+};
+
+async function transferGreen() {
+  transferRecognizer.ensureModelLoaded();
+  const green = await transferRecognizer.collectExample('green', collectExampleOptions);
+};
+
+async function transferBlue() {
+  transferRecognizer.ensureModelLoaded();
+  const blue = await transferRecognizer.collectExample('blue', collectExampleOptions);
+};
+
+async function transferPurple() {
+  transferRecognizer.ensureModelLoaded();
+  const purple = await transferRecognizer.collectExample('purple', collectExampleOptions);
+};
+
+async function transferPink() {
+  transferRecognizer.ensureModelLoaded();
+  const pink = await transferRecognizer.collectExample('pink', collectExampleOptions);
+};
+
+async function transferBN() {
+  transferRecognizer.ensureModelLoaded();
+  const bn = await transferRecognizer.collectExample('_background_noise_', collectExampleOptions);
+};
+
+function getResults(correctWord){
+  alert(guessWord);
+  alert(correctWord);
+ if(guessWord == correctWord){
+return true;
+ }
+ else{
+ return false;
+ }
+};
+
+  /* create timeline */
+var timeline = [];
+
+  /* define welcome message trial */
+  var welcome = {
+    type: "html-mic-button-load",
+    stimulus: '<p>Welcome to the experiment.</p>' +
+    '<p>You will be presented with a series of color words. Please answer the color of the word, not what the word says.</p>' +
+    '<p>Press the key representing the first letter of the color of the word. Example, if the color of the word is GREEN, press the G key.</p>',
+
+    choices: ['Continue'],
+      margin_vertical: '20px'
+  };
+  timeline.push(welcome);
+
+  var part_1 = {
+    type: "html-button-response",
+    stimulus: '<p>The first half of the experiment will show a series of words on the screen.</p>' +
+    '<p>Please repeat each word that appears into your microphone.</p>' +
+    '<p>There will also be a portion where you are required to stay silent, a sentence will appear on the screen instructing this to you.</p>',
+
+    choices: ['Continue'],
+      margin_vertical: '20px'
+  };
+  timeline.push(part_1);
+
+  var transfer_red1 = {
+    type: "html-mic-button-response",
+    stimulus: '<p style="font-size: 48px; color:black;">Red</p>',
+
+    choices: ['Next'],
+    margin_vertical: '20px',
+
+  on_finish: function(){
+    transferRed();
+  },
+};
+    timeline.push(transfer_red1);
+
+    var transfer_red2 = {
+      type: "html-mic-button-response",
+      stimulus: '<p style="font-size: 48px; color:black;">Red</p>',
+
+      choices: ['Next'],
+      margin_vertical: '20px',
+
+    on_finish: function(){
+      transferRed();
+    },
+    };
+
+    timeline.push(transfer_red2);
+
+    var transfer_red3 = {
+     type: "html-mic-button-response",
+     stimulus: '<p style="font-size: 48px; color:black;">Red</p>',
+
+     choices: ['Next'],
+     margin_vertical: '20px',
+
+   on_finish: function(){
+     transferRed();
+   },
+ };
+
+ timeline.push(transfer_red3);
+
+
+ var transfer_red4 = {
+   type: "html-mic-button-response",
+   stimulus: '<p style="font-size: 48px; color:black;">Red</p>',
+
+   choices: ['Next'],
+   margin_vertical: '20px',
+
+ on_finish: function(){
+   transferRed();
+ },
+};
+
+timeline.push(transfer_red4);
+
+var transfer_red5 = {
+  type: "html-mic-button-response",
+  stimulus: '<p style="font-size: 48px; color:black;">Red</p>',
+
+  choices: ['Next'],
+  margin_vertical: '20px',
+
+on_finish: function(){
+  transferRed();
+},
+};
+
+timeline.push(transfer_red5);
+
+var transfer_red6 = {
+  type: "html-mic-button-response",
+  stimulus: '<p style="font-size: 48px; color:black;">Red</p>',
+
+  choices: ['Next'],
+  margin_vertical: '20px',
+
+on_finish: function(){
+  transferRed();
+},
+};
+
+timeline.push(transfer_red6);
+
+var transfer_red7 = {
+  type: "html-mic-button-response",
+  stimulus: '<p style="font-size: 48px; color:black;">Red</p>',
+
+  choices: ['Next'],
+  margin_vertical: '20px',
+
+on_finish: function(){
+  transferRed();
+},
+};
+
+timeline.push(transfer_red7);
+
+var transfer_red8 = {
+  type: "html-mic-button-response",
+  stimulus: '<p style="font-size: 48px; color:black;">Red</p>',
+
+  choices: ['Next'],
+  margin_vertical: '20px',
+
+on_finish: function(){
+  transferRed();
+  trainNew();
+},
+};
+
+timeline.push(transfer_red8);
+
+var part_2 = {
+  type: "html-button-response",
+  stimulus: '<p>You have completed the transfer learning part of the experiment.</p>' +
+  '<p> You are halfway through the experiment.</p>' +
+  '<p>In the following part of the experiment, you will be presented with a series of color words. Please answer the color of the word, not what the word says.</p>' +
+  '<p>Press the key representing the first letter of the color of the word. Example, if the color of the word is GREEN, press the G key.</p>',
+
+  choices: ['Continue'],
+    margin_vertical: '20px'
+};
+timeline.push(part_2);
+
+var trial_1 = {
+  type: 'html-mic-button-response',
+  stimulus: '<p style="font-size: 48px; color: #FF1493;">Red</p>',
+  choices: ['Next'],
+  margin_vertical: '20px',
+
+  on_finish: function(data){
+    data.correct = getResults(wordList[0]);
+
+  },
+};
+
+timeline.push(trial_1);
+
+var debrief = {
+  type: 'html-keyboard-response',
+  stimulus: '<div class="instructions">'+
+  '<p>You have completed the experiment. Thank you for participating!</p>'+
+  '<p><a href="https://app.prolific.co/submissions/complete?cc=5E47AAF9">Click here to finish the experiment and return to Prolific</a>. You do not need a completion code.</p>'+
+  '</div>',
+  choices: jsPsych.NO_KEYS,
+}
+timeline.push(debrief);
+
+/* start the experiment */
+jsPsych.init({
+  timeline: timeline
+});
+
+</script>
+</html>

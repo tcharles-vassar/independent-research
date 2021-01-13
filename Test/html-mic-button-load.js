@@ -195,7 +195,7 @@ jsPsych.plugins["html-mic-button-load"] = (function() {
   };
 
   function startListening() {
-    document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn' disabled>Next</button>";
+     document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn' disabled>Next</button>";
       recognizer.listen(({scores}) => {
 
           // Everytime the model evaluates a result it will return the scores array
@@ -212,7 +212,7 @@ jsPsych.plugins["html-mic-button-load"] = (function() {
       },
       {
           probabilityThreshold: 0.70
-      });
+      }); 
   };
 
   function stopListening(){
