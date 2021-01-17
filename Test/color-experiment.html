@@ -9,6 +9,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
   <script src = "html-mic-button-load.js"></script>
   <script src = "html-mic-button-response.js"></script>
+  <script src = "html-train.js"></script>
   <script src="speech-commands.js"></script>
   <link href="jspsych-6/css/jspsych.css" rel="stylesheet" type="text/css"></link>
 </head>
@@ -19,26 +20,29 @@ var modelLoaded = false;
 let recognizer;
 let transferRecognizer;
 let words;
+let choiceWord;
 //const wordList = ["zero","one","two","three","four","five","six","seven","eight","nine", "yes", "no", "up", "down", "left", "right", "stop", "go", "red"];
 const wordList = ["red"];
 const collectExampleOptions = {};
 
-async function loadTransfer() {
+/*async function loadTransfer() {
 
     // When calling `create()`, you must provide the type of the audio input.
     // - BROWSER_FFT uses the browser's native Fourier transform.
     recognizer = speechCommands.create("BROWSER_FFT");
     await recognizer.ensureModelLoaded()
 
-    transferRecognizer = recognizer.createTransfer('colors');
 
 };
 
-loadTransfer();
+loadTransfer();*/
 
-async function transferRed() {
-  transferRecognizer.ensureModelLoaded();
-  const red = await transferRecognizer.collectExample('red', collectExampleOptions);
+
+
+async function transferRed(tr) {
+  //tr.ensureModelLoaded();
+  await tr.collectExample('red');
+  //alert(tr.countExamples());
   //wordList.add('red');
 };
 
@@ -126,14 +130,21 @@ var timeline = [];
   timeline.push(part_1);
 
   var transfer_red1 = {
-    type: "html-mic-button-response",
+    type: "html-train",
     stimulus: '<p style="font-size: 48px; color:black;">Red</p>',
 
     choices: ['Next'],
     margin_vertical: '20px',
 
+    on_start: function(){
+      choiceWord = 'red';
+    },
+
   on_finish: function(){
-    transferRed();
+    transferRecognizer = recognizer.createTransfer('colors');
+    transferRed(transferRecognizer);
+    alert(transferRecognizer);
+    alert(transferRecognizer.countExamples());
   },
 };
     timeline.push(transfer_red1);
@@ -812,6 +823,7 @@ timeline.push(transfer_red7);
   on_finish: function(){
     transferRed();
     trainNew();
+    alert(transferRecognizer.countExamples());
   },
 };
 

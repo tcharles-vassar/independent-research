@@ -1,4 +1,4 @@
-jsPsych.plugins["html-mic-button-response"] = (function() {
+jsPsych.plugins["html-train"] = (function() {
 
   var plugin = {};
 
@@ -194,31 +194,43 @@ jsPsych.plugins["html-mic-button-response"] = (function() {
       // - BROWSER_FFT uses the browser's native Fourier transform.
       recognizer = speechCommands.create("BROWSER_FFT");
       await recognizer.ensureModelLoaded()
+      const transferRecognizer = recognizer.createTransfer('colors');
 
       words = recognizer.wordLabels();
       modelLoaded = true;
 
   };
 
-  function startListening() {
+  async function startListening() {
      document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn' disabled>Next</button>";
-      recognizer.listen(({scores}) => {
-
-          // Everytime the model evaluates a result it will return the scores array
-          // Based on this data we will build a new array with each word and it's corresponding score
-          scores = Array.from(scores).map((s, i) => ({score: s, word: words[i]}));
-
-          // After that we sort the array by scode descending
-          scores.sort((s1, s2) => s2.score - s1.score);
-
-          // And we highlight the word with the highest score
-          //const elementId = `word-${scores[0].word}`;
-          guessWord = scores[0].word;
-          stopListening();
-      },
-      {
-          probabilityThreshold: 0.70
+      recognizer.listen(result => {
+            for (let i = 0; i < candidateWords.length; ++i) {
+              wordsAndProbs.push({ word: candidateWords[i], prob: result.scores[i]});
+            }
+            wordsAndProbs.sort((a, b) => (b.prob - a.prob));
+            const topGuess = wordsAndProbs[0].word;
+            console.log(topGuess);
+          },
+          {
+            includeSpectrogram: true,
+            probabilityThreshold: Number.parseFloat(probaThresholdInput.value)
+          })
+      .then(() => {
+        console.log('Stream started');
+      })
+      .catch(err => {
+        console.log('Failed to start streaming: ' + err.message);
       });
+
+      await transferRecognizer.collectExample(choiceWord);
+
+      await transferRecognizer.startStreaming(result => {
+
+  const words = transferRecognizer.wordLabels();
+  for (let i = 0; i < words; ++i) {
+    console.log(`score for word '${words[i]}' = ${result.scores[i]}`);
+  }
+}, {probabilityThreshold: 0.75});
   };
 
   function stopListening(){
