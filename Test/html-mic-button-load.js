@@ -187,7 +187,7 @@ jsPsych.plugins["html-mic-button-load"] = (function() {
       // When calling `create()`, you must provide the type of the audio input.
       // - BROWSER_FFT uses the browser's native Fourier transform.
       recognizer = speechCommands.create("BROWSER_FFT");
-      await recognizer.ensureModelLoaded()
+      await recognizer.ensureModelLoaded();
 
       words = recognizer.wordLabels();
       modelLoaded = true;
@@ -212,7 +212,7 @@ jsPsych.plugins["html-mic-button-load"] = (function() {
       },
       {
           probabilityThreshold: 0.70
-      }); 
+      });
   };
 
   function stopListening(){

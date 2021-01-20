@@ -109,10 +109,10 @@ jsPsych.plugins["html-train"] = (function() {
 
     if(modelLoaded) {
       alert("Loaded");
-           startListening();
+          startTraining();
        }else{
          alert("Not Loaded");
-           loadModel();
+           loadModelTrain();
        }
 
     // store response
@@ -182,30 +182,31 @@ jsPsych.plugins["html-train"] = (function() {
 
   };
 
-  //let recognizer;
-  //let words;
-  //const wordList = ["zero","one","two","three","four","five","six","seven","eight","nine", "yes", "no", "up", "down", "left", "right", "stop", "go"];
-
-  //var guessWord = "";
-
-  async function loadModel() {
+  async function loadModelTrain() {
 
       // When calling `create()`, you must provide the type of the audio input.
       // - BROWSER_FFT uses the browser's native Fourier transform.
       recognizer = speechCommands.create("BROWSER_FFT");
-      await recognizer.ensureModelLoaded()
-      const transferRecognizer = recognizer.createTransfer('colors');
+      await recognizer.ensureModelLoaded();
+      transferRecognizer = recognizer.createTransfer('colors');
 
-      words = recognizer.wordLabels();
+      candidateWords = recognizer.wordLabels();
       modelLoaded = true;
 
   };
 
-  async function startListening() {
+  async function startTraining() {
      document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn' disabled>Next</button>";
       recognizer.listen(result => {
+        candidateWords = recognizer.wordLabels();
+        alert('candidateWords:' + candidateWords.length);
+        let wordsAndProbs = [];
+
             for (let i = 0; i < candidateWords.length; ++i) {
+              alert('word:' + candidateWords[i]);
+              alert('before' + wordsAndProbs.length);
               wordsAndProbs.push({ word: candidateWords[i], prob: result.scores[i]});
+              alert('after' + wordsAndProbs.length);
             }
             wordsAndProbs.sort((a, b) => (b.prob - a.prob));
             const topGuess = wordsAndProbs[0].word;
@@ -213,7 +214,7 @@ jsPsych.plugins["html-train"] = (function() {
           },
           {
             includeSpectrogram: true,
-            probabilityThreshold: Number.parseFloat(probaThresholdInput.value)
+            probabilityThreshold: 0.7
           })
       .then(() => {
         console.log('Stream started');
@@ -222,11 +223,20 @@ jsPsych.plugins["html-train"] = (function() {
         console.log('Failed to start streaming: ' + err.message);
       });
 
+      alert('choiceWord:' + choiceWord);
+
+      alert('txfrRec:' + transferRecognizer);
+
       await transferRecognizer.collectExample(choiceWord);
 
-      await transferRecognizer.startStreaming(result => {
+      const exampleCounts = transferRecognizer.countExamples();
+
+      alert('Example Counts:' + exampleCounts);
+
+      await transferRecognizer.listen(result => {
 
   const words = transferRecognizer.wordLabels();
+  alert(words);
   for (let i = 0; i < words; ++i) {
     console.log(`score for word '${words[i]}' = ${result.scores[i]}`);
   }
