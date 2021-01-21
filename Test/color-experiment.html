@@ -19,6 +19,7 @@
 var modelLoaded = false;
 let recognizer;
 let transferRecognizer;
+let transferRecognizerTrain;
 let candidateWords;
 let choiceWord;
 //const wordList = ["zero","one","two","three","four","five","six","seven","eight","nine", "yes", "no", "up", "down", "left", "right", "stop", "go", "red"];
@@ -141,9 +142,7 @@ var timeline = [];
     },
 
   on_finish: function(){
-    transferRed(transferRecognizer);
-    alert(transferRecognizer);
-    alert(transferRecognizer.countExamples());
+    transferRed(transferRecognizerTrain);
   },
 };
     timeline.push(transfer_red1);

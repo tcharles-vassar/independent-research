@@ -188,25 +188,28 @@ jsPsych.plugins["html-train"] = (function() {
       // - BROWSER_FFT uses the browser's native Fourier transform.
       recognizer = speechCommands.create("BROWSER_FFT");
       await recognizer.ensureModelLoaded();
-      transferRecognizer = recognizer.createTransfer('colors');
+      transferRecognizerTrain = recognizer.createTransfer('colors');
 
       candidateWords = recognizer.wordLabels();
       modelLoaded = true;
 
   };
 
+let txfrRec;
   async function startTraining() {
      document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn' disabled>Next</button>";
       recognizer.listen(result => {
+
+        txfrRec = transferRecognizerTrain;
         candidateWords = recognizer.wordLabels();
-        alert('candidateWords:' + candidateWords.length);
+        //alert('candidateWords:' + candidateWords.length);
         let wordsAndProbs = [];
 
             for (let i = 0; i < candidateWords.length; ++i) {
-              alert('word:' + candidateWords[i]);
-              alert('before' + wordsAndProbs.length);
+              //alert('word:' + candidateWords[i]);
+              //alert('before' + wordsAndProbs.length);
               wordsAndProbs.push({ word: candidateWords[i], prob: result.scores[i]});
-              alert('after' + wordsAndProbs.length);
+              //alert('after' + wordsAndProbs.length);
             }
             wordsAndProbs.sort((a, b) => (b.prob - a.prob));
             const topGuess = wordsAndProbs[0].word;
@@ -225,17 +228,26 @@ jsPsych.plugins["html-train"] = (function() {
 
       alert('choiceWord:' + choiceWord);
 
-      alert('txfrRec:' + transferRecognizer);
+      alert('txfrRec:' + txfrRec);
 
-      await transferRecognizer.collectExample(choiceWord);
+      await txfrRec.collectExample(choiceWord);
 
-      const exampleCounts = transferRecognizer.countExamples();
+      const exampleCounts = txfrRec.countExamples();
 
       alert('Example Counts:' + exampleCounts);
 
-      await transferRecognizer.listen(result => {
+      await transferRecognizerTrain.train({
+  epochs: 40,
+  callback: {
+    onEpochEnd: async (epoch, logs) => {
+      console.log(`Epoch ${epochs}: loss=${logs.loss}, accuracy=${logs.acc}`);
+    }
+  }
+});
 
-  const words = transferRecognizer.wordLabels();
+      await transferRecognizerTrain.listen(result => {
+
+  const words = transferRecognizerTrain.wordLabels();
   alert(words);
   for (let i = 0; i < words; ++i) {
     console.log(`score for word '${words[i]}' = ${result.scores[i]}`);
