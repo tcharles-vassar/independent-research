@@ -187,7 +187,7 @@ jsPsych.plugins["html-mic-button-response"] = (function() {
   //const wordList = ["zero","one","two","three","four","five","six","seven","eight","nine", "yes", "no", "up", "down", "left", "right", "stop", "go"];
 
   //var guessWord = "";
-
+/*
   async function loadModel() {
 
       // When calling `create()`, you must provide the type of the audio input.
@@ -199,6 +199,7 @@ jsPsych.plugins["html-mic-button-response"] = (function() {
       modelLoaded = true;
 
   };
+  */
 
   function startListening() {
      document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn' disabled>Next</button>";

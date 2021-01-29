@@ -112,7 +112,6 @@ jsPsych.plugins["html-train"] = (function() {
           startTraining();
        }else{
          alert("Not Loaded");
-           loadModelTrain();
        }
 
     // store response
@@ -182,93 +181,20 @@ jsPsych.plugins["html-train"] = (function() {
 
   };
 
-  async function loadModelTrain() {
-
-      // When calling `create()`, you must provide the type of the audio input.
-      // - BROWSER_FFT uses the browser's native Fourier transform.
-      recognizer = speechCommands.create("BROWSER_FFT");
-      await recognizer.ensureModelLoaded();
-      transferRecognizerTrain = recognizer.createTransfer('colors');
-
-      candidateWords = recognizer.wordLabels();
-      modelLoaded = true;
-
-  };
-
-let txfrRec;
-  async function startTraining() {
-     document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn' disabled>Next</button>";
-      recognizer.listen(result => {
-
-        txfrRec = transferRecognizerTrain;
-        candidateWords = recognizer.wordLabels();
-        //alert('candidateWords:' + candidateWords.length);
-        let wordsAndProbs = [];
-
-            for (let i = 0; i < candidateWords.length; ++i) {
-              //alert('word:' + candidateWords[i]);
-              //alert('before' + wordsAndProbs.length);
-              wordsAndProbs.push({ word: candidateWords[i], prob: result.scores[i]});
-              //alert('after' + wordsAndProbs.length);
-            }
-            wordsAndProbs.sort((a, b) => (b.prob - a.prob));
-            const topGuess = wordsAndProbs[0].word;
-            console.log(topGuess);
-          },
-          {
-            includeSpectrogram: true,
-            probabilityThreshold: 0.7
-          })
-      .then(() => {
-        console.log('Stream started');
-      })
-      .catch(err => {
-        console.log('Failed to start streaming: ' + err.message);
-      });
-
-      alert('choiceWord:' + choiceWord);
-
-      alert('txfrRec:' + txfrRec);
-
-      await txfrRec.collectExample(choiceWord);
-
-      const exampleCounts = txfrRec.countExamples();
-
-      alert('Example Counts:' + exampleCounts);
-
-      await transferRecognizerTrain.train({
-  epochs: 40,
-  callback: {
-    onEpochEnd: async (epoch, logs) => {
-      console.log(`Epoch ${epochs}: loss=${logs.loss}, accuracy=${logs.acc}`);
-    }
-  }
+await transferRecognizerTrain.train({
+epochs: 40,
+callback: {
+onEpochEnd: async (epoch, logs) => {
+console.log(`Epoch ${epochs}: loss=${logs.loss}, accuracy=${logs.acc}`);
+}
+}
 });
 
-      await transferRecognizerTrain.listen(result => {
+await transferRecognizerTrain.listen(result => {
 
-  const words = transferRecognizerTrain.wordLabels();
-  alert(words);
-  for (let i = 0; i < words; ++i) {
-    console.log(`score for word '${words[i]}' = ${result.scores[i]}`);
-  }
+const words = transferRecognizerTrain.wordLabels();
+alert(words);
+for (let i = 0; i < words; ++i) {
+console.log(`score for word '${words[i]}' = ${result.scores[i]}`);
+}
 }, {probabilityThreshold: 0.75});
-  };
-
-  function stopListening(){
-    document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn'>Next</button>";
-      recognizer.stopListening();
-  };
-
-   /* function getResults(correctWord){
-    if(guessWord == correctWord){
-return true;
-   }
-   else{
-    return false;
-    }
-  }; */
-
-
-  return plugin;
-})();

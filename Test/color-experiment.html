@@ -18,10 +18,11 @@
 
 var modelLoaded = false;
 let recognizer;
-let transferRecognizer;
+//let transferRecognizer;
 let transferRecognizerTrain;
 let candidateWords;
 let choiceWord;
+
 //const wordList = ["zero","one","two","three","four","five","six","seven","eight","nine", "yes", "no", "up", "down", "left", "right", "stop", "go", "red"];
 const wordList = ["red"];
 const collectExampleOptions = {};
@@ -39,7 +40,7 @@ const collectExampleOptions = {};
 loadTransfer();*/
 
 
-
+/*
 async function transferRed(tr) {
   //tr.ensureModelLoaded();
   await tr.collectExample('red');
@@ -82,6 +83,7 @@ async function transferBN() {
   const bn = await transferRecognizer.collectExample('_background_noise_', collectExampleOptions);
 };
 
+
 async function trainNew(){
   await transferRecognizer.train({
   epochs: 40,
@@ -92,6 +94,8 @@ async function trainNew(){
   }
 });
 }
+
+*/
 
 function getResults(correctWord){
   alert(guessWord);
@@ -140,10 +144,6 @@ var timeline = [];
     on_start: function(){
       choiceWord = 'red';
     },
-
-  on_finish: function(){
-    transferRed(transferRecognizerTrain);
-  },
 };
     timeline.push(transfer_red1);
 
@@ -245,9 +245,9 @@ var timeline = [];
     choices: ['Next'],
     margin_vertical: '20px',
 
-  on_finish: function(){
-    transferRed();
-  },
+    on_start: function(){
+      choiceWord = 'red';
+    },
 };
 
 timeline.push(transfer_red2);
@@ -343,9 +343,9 @@ timeline.push(transfer_red2);
     choices: ['Next'],
     margin_vertical: '20px',
 
-  on_finish: function(){
-    transferRed();
-  },
+    on_start: function(){
+      choiceWord = 'red';
+    },
 };
 
 timeline.push(transfer_red3);
@@ -438,9 +438,9 @@ timeline.push(transfer_red3);
     choices: ['Next'],
     margin_vertical: '20px',
 
-  on_finish: function(){
-    transferRed();
-  },
+    on_start: function(){
+      choiceWord = 'red';
+    },
 };
 
 timeline.push(transfer_red4);
@@ -533,9 +533,9 @@ timeline.push(transfer_red4);
     choices: ['Next'],
     margin_vertical: '20px',
 
-  on_finish: function(){
-    transferRed();
-  },
+    on_start: function(){
+      choiceWord = 'red';
+    },
 };
 
 timeline.push(transfer_red5);
@@ -628,9 +628,9 @@ timeline.push(transfer_red5);
     choices: ['Next'],
     margin_vertical: '20px',
 
-  on_finish: function(){
-    transferRed();
-  },
+    on_start: function(){
+      choiceWord = 'red';
+    },
 };
 
 timeline.push(transfer_red6);
@@ -723,9 +723,9 @@ timeline.push(transfer_red6);
     choices: ['Next'],
     margin_vertical: '20px',
 
-  on_finish: function(){
-    transferRed();
-  },
+    on_start: function(){
+      choiceWord = 'red';
+    },
 };
 
 timeline.push(transfer_red7);
@@ -818,11 +818,15 @@ timeline.push(transfer_red7);
     choices: ['Next'],
     margin_vertical: '20px',
 
-  on_finish: function(){
-    transferRed();
-    trainNew();
-    alert(transferRecognizer.countExamples());
-  },
+    on_start: function(){
+      choiceWord = 'red';
+    },
+
+  //on_finish: function(){
+  //  transferRed();
+  //  trainNew();
+  //  alert(transferRecognizer.countExamples());
+//  },
 };
 
 timeline.push(transfer_red8);

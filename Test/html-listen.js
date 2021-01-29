@@ -1,9 +1,9 @@
-jsPsych.plugins["html-mic-button-load"] = (function() {
+jsPsych.plugins["html-listen"] = (function() {
 
   var plugin = {};
 
   plugin.info = {
-    name: 'html-mic-button-load',
+    name: 'html-listen',
     description: '',
     parameters: {
       stimulus: {
@@ -67,8 +67,6 @@ jsPsych.plugins["html-mic-button-load"] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    loadModel();
-
     // display stimulus
     var html = '<div id="jspsych-html-mic-button-response-stimulus">'+trial.stimulus+'</div>';
 
@@ -108,6 +106,13 @@ jsPsych.plugins["html-mic-button-load"] = (function() {
         after_response(choice);
       });
     }
+
+    if(modelLoaded) {
+      alert("Loaded");
+          startTraining();
+       }else{
+         alert("Not Loaded");
+       }
 
     // store response
     var response = {
@@ -176,61 +181,62 @@ jsPsych.plugins["html-mic-button-load"] = (function() {
 
   };
 
-  //let recognizer;
-  //let words;
-  //const wordList = ["zero","one","two","three","four","five","six","seven","eight","nine", "yes", "no", "up", "down", "left", "right", "stop", "go"];
-
-  //var guessWord = "";
-
-  async function loadModel() {
-
-      // When calling `create()`, you must provide the type of the audio input.
-      // - BROWSER_FFT uses the browser's native Fourier transform.
-      recognizer = speechCommands.create("BROWSER_FFT");
-      await recognizer.ensureModelLoaded();
-
-      words = recognizer.wordLabels();
-      modelLoaded = true;
-
-      transferRecognizerTrain = recognizer.createTransfer('colors');
-
-  };
-
-/*
-  function startListening() {
+  async function startTraining() {
      document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn' disabled>Next</button>";
-      recognizer.listen(({scores}) => {
+      recognizer.listen(result => {
 
-          // Everytime the model evaluates a result it will return the scores array
-          // Based on this data we will build a new array with each word and it's corresponding score
-          scores = Array.from(scores).map((s, i) => ({score: s, word: words[i]}));
+        candidateWords = recognizer.wordLabels();
+        //alert('candidateWords:' + candidateWords.length);
+        let wordsAndProbs = [];
 
-          // After that we sort the array by scode descending
-          scores.sort((s1, s2) => s2.score - s1.score);
-
-          // And we highlight the word with the highest score
-          //const elementId = `word-${scores[0].word}`;
-          guessWord = scores[0].word;
-          stopListening();
-      },
-      {
-          probabilityThreshold: 0.70
+            for (let i = 0; i < candidateWords.length; ++i) {
+              //alert('word:' + candidateWords[i]);
+              //alert('before' + wordsAndProbs.length);
+              wordsAndProbs.push({ word: candidateWords[i], prob: result.scores[i]});
+              //alert('after' + wordsAndProbs.length);
+            }
+            wordsAndProbs.sort((a, b) => (b.prob - a.prob));
+            const topGuess = wordsAndProbs[0].word;
+            console.log(topGuess);
+          },
+          {
+            includeSpectrogram: true,
+            probabilityThreshold: 0.7
+          })
+      .then(() => {
+        console.log('Stream started');
+      })
+      .catch(err => {
+        console.log('Failed to start streaming: ' + err.message);
       });
-  };
+
+      alert('choiceWord:' + choiceWord);
+
+      //alert('txfrRec:' + txfrRec);
+
+      await transferRecognizerTrain.collectExample(choiceWord);
+
+      const exampleCounts = transferRecognizerTrain.countExamples();
+
+      alert('Example Counts:' + exampleCounts);
+
+      stopListening();
+
+};
 
   function stopListening(){
     document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn'>Next</button>";
       recognizer.stopListening();
   };
-*/
-  //function getResults(correctWord){
-  //  if(guessWord == correctWord){
-//return true;
-  //  }
-  //  else{
-  //  return false;
-  //  }
-//  };
+
+   /* function getResults(correctWord){
+    if(guessWord == correctWord){
+return true;
+   }
+   else{
+    return false;
+    }
+  }; */
 
 
   return plugin;
