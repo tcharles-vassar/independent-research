@@ -9,8 +9,8 @@
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
   <script src = "html-mic-button-load.js"></script>
   <script src = "html-mic-button-response.js"></script>
-  <script src = "html-train.js"></script>
   <script src = "html-listen.js"></script>
+  <script src = "html-train.js"></script>
   <script src="speech-commands.js"></script>
   <link href="jspsych-6/css/jspsych.css" rel="stylesheet" type="text/css"></link>
 </head>
@@ -25,7 +25,7 @@ let candidateWords;
 let choiceWord;
 
 //const wordList = ["zero","one","two","three","four","five","six","seven","eight","nine", "yes", "no", "up", "down", "left", "right", "stop", "go", "red"];
-const wordList = ["red"];
+const newWordList = ["red"];
 const collectExampleOptions = {};
 
 /*async function loadTransfer() {
@@ -99,8 +99,8 @@ async function trainNew(){
 */
 
 function getResults(correctWord){
-  alert(guessWord);
-  alert(correctWord);
+  alert("guess: " + guessWord);
+  alert("correctWord: " + correctWord);
  if(guessWord == correctWord){
 return true;
  }
@@ -335,7 +335,9 @@ timeline.push(transfer_red2);
   on_finish: function(){
     transferBN();
   },
-}; */
+};
+
+*/
 
    var transfer_red3 = {
     type: "html-listen",
@@ -430,7 +432,7 @@ timeline.push(transfer_red3);
     await transferRecognizer.collectExample('_background_noise_');
   }
 
-  */
+*/
 
   var transfer_red4 = {
     type: "html-listen",
@@ -525,7 +527,7 @@ timeline.push(transfer_red4);
     await transferRecognizer.collectExample('_background_noise_');
   }
 
-  */
+*/
 
   var transfer_red5 = {
     type: "html-listen",
@@ -620,7 +622,7 @@ timeline.push(transfer_red5);
     await transferRecognizer.collectExample('_background_noise_');
   }
 
-  */
+*/
 
   var transfer_red6 = {
     type: "html-listen",
@@ -715,7 +717,7 @@ timeline.push(transfer_red6);
     await transferRecognizer.collectExample('_background_noise_');
   }
 
-  */
+*/
 
   var transfer_red7 = {
     type: "html-listen",
@@ -822,12 +824,6 @@ timeline.push(transfer_red7);
     on_start: function(){
       choiceWord = 'red';
     },
-
-  //on_finish: function(){
-  //  transferRed();
-  //  trainNew();
-  //  alert(transferRecognizer.countExamples());
-//  },
 };
 
 timeline.push(transfer_red8);
@@ -912,14 +908,22 @@ timeline.push(transfer_red8);
   }
 */
   var part_2 = {
-    type: "html-button-response",
+    type: "html-train",
     stimulus: '<p>You have completed the transfer learning part of the experiment.</p>' +
     '<p> You are halfway through the experiment.</p>' +
     '<p>In the following part of the experiment, you will be presented with a series of color words. Please answer the color of the word, not what the word says.</p>' +
     '<p>Press the key representing the first letter of the color of the word. Example, if the color of the word is GREEN, press the G key.</p>',
 
     choices: ['Continue'],
-      margin_vertical: '20px'
+      margin_vertical: '20px',
+
+/*
+      on_start: function(){
+        sayHello();
+      trainNewModel();
+      wordTestTrain();
+    }, */
+
   };
   timeline.push(part_2);
 
@@ -930,7 +934,7 @@ timeline.push(transfer_red8);
     margin_vertical: '20px',
 
     on_finish: function(data){
-      data.correct = getResults(wordList[0]);
+      data.correct = getResults(newWordList[0]);
 
     },
   };

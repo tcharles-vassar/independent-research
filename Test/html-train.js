@@ -3,7 +3,7 @@ jsPsych.plugins["html-train"] = (function() {
   var plugin = {};
 
   plugin.info = {
-    name: 'html-mic-button-response',
+    name: 'html-train',
     description: '',
     parameters: {
       stimulus: {
@@ -107,12 +107,8 @@ jsPsych.plugins["html-train"] = (function() {
       });
     }
 
-    if(modelLoaded) {
-      alert("Loaded");
-          startTraining();
-       }else{
-         alert("Not Loaded");
-       }
+    trainNewModel();
+    wordTestTrain();
 
     // store response
     var response = {
@@ -181,6 +177,11 @@ jsPsych.plugins["html-train"] = (function() {
 
   };
 
+  function sayHello(){
+    alert('hello');
+  }
+
+async function trainNewModel(){
 await transferRecognizerTrain.train({
 epochs: 40,
 callback: {
@@ -189,7 +190,9 @@ console.log(`Epoch ${epochs}: loss=${logs.loss}, accuracy=${logs.acc}`);
 }
 }
 });
+};
 
+async function wordTestTrain(){
 await transferRecognizerTrain.listen(result => {
 
 const words = transferRecognizerTrain.wordLabels();
@@ -198,3 +201,7 @@ for (let i = 0; i < words; ++i) {
 console.log(`score for word '${words[i]}' = ${result.scores[i]}`);
 }
 }, {probabilityThreshold: 0.75});
+};
+
+return plugin;
+})();
