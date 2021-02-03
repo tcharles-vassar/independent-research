@@ -11,6 +11,7 @@
   <script src = "html-mic-button-response.js"></script>
   <script src = "html-listen.js"></script>
   <script src = "html-train.js"></script>
+  <script src = "html-trained.js"></script>
   <script src="speech-commands.js"></script>
   <link href="jspsych-6/css/jspsych.css" rel="stylesheet" type="text/css"></link>
 </head>
@@ -23,9 +24,10 @@ let recognizer;
 let transferRecognizerTrain;
 let candidateWords;
 let choiceWord;
+let guessWord;
 
 //const wordList = ["zero","one","two","three","four","five","six","seven","eight","nine", "yes", "no", "up", "down", "left", "right", "stop", "go", "red"];
-const newWordList = ["red"];
+const newWordList = ["red", "orange"];
 const collectExampleOptions = {};
 
 /*async function loadTransfer() {
@@ -148,19 +150,21 @@ var timeline = [];
 };
     timeline.push(transfer_red1);
 
-/*  var transfer_orange1 = {
-    type: "html-mic-button-response",
+
+  var transfer_orange1 = {
+    type: "html-listen",
     stimulus: '<p style="font-size: 48px; color:black;">Orange</p>',
 
     choices: ['Next'],
     margin_vertical: '20px',
 
-  on_finish: function(){
-    transferOrange();
-  },
+    on_start: function(){
+      choiceWord = 'orange';
+    },
 };
     timeline.push(transfer_orange1);
 
+/*
   var transfer_yellow1 = {
     type: "html-mic-button-response",
     stimulus: '<p style="font-size: 48px; color:black;">Yellow</p>',
@@ -253,18 +257,21 @@ var timeline = [];
 
 timeline.push(transfer_red2);
 
-  /* var transfer_orange2 = {
+   var transfer_orange2 = {
     type: "html-mic-button-response",
     stimulus: '<p style="font-size: 48px; color:black;">Orange</p>',
 
     choices: ['Next'],
     margin_vertical: '20px',
 
-  on_finish: function(){
-    transferOrange();
-  },
+    on_start: function(){
+      choiceWord = 'orange';
+    },
 };
 
+timeline.push(transfer_orange2);
+
+/*
   var transfer_yellow2 = {
     type: "html-mic-button-response",
     stimulus: '<p style="font-size: 48px; color:black;">Yellow</p>',
@@ -353,18 +360,22 @@ timeline.push(transfer_red2);
 
 timeline.push(transfer_red3);
 
-  /*
 
   var transfer_orange3 = {
     type: "html-mic-button-response",
     stimulus: '<p style="font-size: 48px; color:black;">Orange</p>',
 
     choices: ['Next'],
-    margin_vertical: '20px'
+    margin_vertical: '20px',
+
+  on_start: function(){
+    choiceWord = 'orange';
   },
-  on_start: function(data){
-    await transferRecognizer.collectExample('orange');
-  }
+};
+
+timeline.push(transfer_orange3);
+
+  /*
 
   var transfer_yellow3 = {
     type: "html-mic-button-response",
@@ -448,18 +459,22 @@ timeline.push(transfer_red3);
 
 timeline.push(transfer_red4);
 
-  /*
 
   var transfer_orange4 = {
     type: "html-mic-button-response",
     stimulus: '<p style="font-size: 48px; color:black;">Orange</p>',
 
     choices: ['Next'],
-    margin_vertical: '20px'
+    margin_vertical: '20px',
+
+  on_start: function(){
+    choiceWord = 'orange';
   },
-  on_start: function(data){
-    await transferRecognizer.collectExample('orange');
-  }
+};
+
+timeline.push(transfer_orange4);
+
+  /*
 
   var transfer_yellow4 = {
     type: "html-mic-button-response",
@@ -543,18 +558,22 @@ timeline.push(transfer_red4);
 
 timeline.push(transfer_red5);
 
-/*
 
   var transfer_orange5 = {
     type: "html-mic-button-response",
     stimulus: '<p style="font-size: 48px; color:black;">Orange</p>',
 
     choices: ['Next'],
-    margin_vertical: '20px'
+    margin_vertical: '20px',
+
+  on_start: function(){
+    choiceWord = 'orange';
   },
-  on_start: function(data){
-    await transferRecognizer.collectExample('orange');
-  }
+};
+
+timeline.push(transfer_orange5);
+
+  /*
 
   var transfer_yellow5 = {
     type: "html-mic-button-response",
@@ -638,19 +657,23 @@ timeline.push(transfer_red5);
 
 timeline.push(transfer_red6);
 
-/*
 
   var transfer_orange6 = {
     type: "html-mic-button-response",
     stimulus: '<p style="font-size: 48px; color:black;">Orange</p>',
 
     choices: ['Next'],
-    margin_vertical: '20px'
-  },
-  on_start: function(data){
-    await transferRecognizer.collectExample('orange');
-  }
+    margin_vertical: '20px',
 
+  on_start: function(){
+    choiceWord = 'orange';
+  },
+};
+
+timeline.push(transfer_orange6);
+
+
+/*
   var transfer_yellow6 = {
     type: "html-mic-button-response",
     stimulus: '<p style="font-size: 48px; color:black;">Yellow</p>',
@@ -733,19 +756,22 @@ timeline.push(transfer_red6);
 
 timeline.push(transfer_red7);
 
-  /*
 
   var transfer_orange7 = {
     type: "html-mic-button-response",
     stimulus: '<p style="font-size: 48px; color:black;">Orange</p>',
 
     choices: ['Next'],
-    margin_vertical: '20px'
-  },
-  on_start: function(data){
-    await transferRecognizer.collectExample('orange');
-  }
+    margin_vertical: '20px',
 
+  on_start: function(){
+    choiceWord = 'orange';
+  },
+};
+
+timeline.push(transfer_orange7);
+
+/*
   var transfer_yellow7 = {
     type: "html-mic-button-response",
     stimulus: '<p style="font-size: 48px; color:black;">Yellow</p>',
@@ -828,18 +854,22 @@ timeline.push(transfer_red7);
 
 timeline.push(transfer_red8);
 
-  /*
 
   var transfer_orange8 = {
     type: "html-mic-button-response",
     stimulus: '<p style="font-size: 48px; color:black;">Orange</p>',
 
     choices: ['Next'],
-    margin_vertical: '20px'
+    margin_vertical: '20px',
+
+  on_start: function(){
+    choiceWord = 'orange';
   },
-  on_start: function(data){
-    await transferRecognizer.collectExample('orange');
-  }
+};
+
+timeline.push(transfer_orange8);
+
+  /*
 
   var transfer_yellow8 = {
     type: "html-mic-button-response",
@@ -928,7 +958,7 @@ timeline.push(transfer_red8);
   timeline.push(part_2);
 
   var trial_1 = {
-    type: 'html-mic-button-response',
+    type: 'html-trained',
     stimulus: '<p style="font-size: 48px; color: #FF1493;">Red</p>',
     choices: ['Next'],
     margin_vertical: '20px',
@@ -940,6 +970,20 @@ timeline.push(transfer_red8);
   };
 
   timeline.push(trial_1);
+
+  var trial_2 = {
+    type: 'html-trained',
+    stimulus: '<p style="font-size: 48px; color: #FF1493;">Orange</p>',
+    choices: ['Next'],
+    margin_vertical: '20px',
+
+    on_finish: function(data){
+      data.correct = getResults(newWordList[1]);
+
+    },
+  };
+
+  timeline.push(trial_2);
 
 /*
   var trial_1 = {

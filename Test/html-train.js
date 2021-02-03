@@ -108,7 +108,6 @@ jsPsych.plugins["html-train"] = (function() {
     }
 
     trainNewModel();
-    wordTestTrain();
 
     // store response
     var response = {
@@ -177,30 +176,16 @@ jsPsych.plugins["html-train"] = (function() {
 
   };
 
-  function sayHello(){
-    alert('hello');
-  }
 
 async function trainNewModel(){
 await transferRecognizerTrain.train({
 epochs: 40,
 callback: {
 onEpochEnd: async (epoch, logs) => {
-console.log(`Epoch ${epochs}: loss=${logs.loss}, accuracy=${logs.acc}`);
+//console.log(`Epoch ${epochs}: loss=${logs.loss}, accuracy=${logs.acc}`);
 }
 }
 });
-};
-
-async function wordTestTrain(){
-await transferRecognizerTrain.listen(result => {
-
-const words = transferRecognizerTrain.wordLabels();
-alert(words);
-for (let i = 0; i < words; ++i) {
-console.log(`score for word '${words[i]}' = ${result.scores[i]}`);
-}
-}, {probabilityThreshold: 0.75});
 };
 
 return plugin;
