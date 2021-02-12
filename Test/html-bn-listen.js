@@ -1,9 +1,9 @@
-jsPsych.plugins["html-train"] = (function() {
+jsPsych.plugins["html-bn-listen"] = (function() {
 
   var plugin = {};
 
   plugin.info = {
-    name: 'html-train',
+    name: 'html-listen',
     description: '',
     parameters: {
       stimulus: {
@@ -107,7 +107,11 @@ jsPsych.plugins["html-train"] = (function() {
       });
     }
 
-    trainNewModel();
+    if(modelLoaded) {
+          bnTraining();
+       }else{
+         alert("Not Loaded");
+       }
 
     // store response
     var response = {
@@ -176,16 +180,42 @@ jsPsych.plugins["html-train"] = (function() {
 
   };
 
+  async function bnTraining() {
+     document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn' disabled>Next</button>";
+      recognizer.listen(result => {
 
-async function trainNewModel(){
-await transferRecognizerTrain.train({
-epochs: 40,
-callback: {
-onEpochEnd: async (epoch, logs) => {
-}
-}
-});
+        candidateWords = recognizer.wordLabels();
+        let wordsAndProbs = [];
+
+            for (let i = 0; i < candidateWords.length; ++i) {
+              wordsAndProbs.push({ word: candidateWords[i], prob: result.scores[i]});
+            }
+            wordsAndProbs.sort((a, b) => (b.prob - a.prob));
+            const topGuess = wordsAndProbs[0].word;
+            //console.log(topGuess);
+          },
+          {
+            includeSpectrogram: true,
+            probabilityThreshold: 0.7
+          })
+      .then(() => {
+        console.log('Stream started');
+      })
+      .catch(err => {
+        console.log('Failed to start streaming: ' + err.message);
+      });
+
+      await transferRecognizerTrain.collectExample(choiceWord);
+
+      setTimeout(stopListening(), 3000);
+
 };
 
-return plugin;
+  function stopListening(){
+    document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn'>Next</button>";
+      recognizer.stopListening();
+  };
+
+
+  return plugin;
 })();

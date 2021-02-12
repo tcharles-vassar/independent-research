@@ -180,7 +180,6 @@ async function trainedModel(){
   document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn' disabled>Next</button>";
 await transferRecognizerTrain.listen(({scores}) => {
       const words = transferRecognizerTrain.wordLabels();
-      alert(words);
 
         // Everytime the model evaluates a result it will return the scores array
         // Based on this data we will build a new array with each word and it's corresponding score

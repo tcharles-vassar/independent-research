@@ -108,7 +108,6 @@ jsPsych.plugins["html-listen"] = (function() {
     }
 
     if(modelLoaded) {
-      //alert("Loaded");
           startTraining();
        }else{
          alert("Not Loaded");
@@ -186,14 +185,10 @@ jsPsych.plugins["html-listen"] = (function() {
       recognizer.listen(result => {
 
         candidateWords = recognizer.wordLabels();
-        //console.log('candidateWords:' + candidateWords.length);
         let wordsAndProbs = [];
 
             for (let i = 0; i < candidateWords.length; ++i) {
-              //console.log('word:' + candidateWords[i]);
-              //console.log('before' + wordsAndProbs.length);
               wordsAndProbs.push({ word: candidateWords[i], prob: result.scores[i]});
-              //console.log('after' + wordsAndProbs.length);
             }
             wordsAndProbs.sort((a, b) => (b.prob - a.prob));
             const topGuess = wordsAndProbs[0].word;
@@ -210,13 +205,7 @@ jsPsych.plugins["html-listen"] = (function() {
         console.log('Failed to start streaming: ' + err.message);
       });
 
-      //alert('choiceWord:' + choiceWord);
-
-      //alert('txfrRec:' + txfrRec);
-
       await transferRecognizerTrain.collectExample(choiceWord);
-
-      //const exampleCounts = transferRecognizerTrain.countExamples();
 
       stopListening();
 
@@ -226,15 +215,6 @@ jsPsych.plugins["html-listen"] = (function() {
     document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn'>Next</button>";
       recognizer.stopListening();
   };
-
-   /* function getResults(correctWord){
-    if(guessWord == correctWord){
-return true;
-   }
-   else{
-    return false;
-    }
-  }; */
 
 
   return plugin;
