@@ -107,6 +107,7 @@ jsPsych.plugins["html-bn-listen"] = (function() {
       });
     }
 
+// check to make sure the model is loaded, else send error alert
     if(modelLoaded) {
           bnTraining();
        }else{
@@ -180,6 +181,7 @@ jsPsych.plugins["html-bn-listen"] = (function() {
 
   };
 
+// function to collect an example of background noise
   async function bnTraining() {
      document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn' disabled>Next</button>";
       recognizer.listen(result => {
@@ -192,7 +194,6 @@ jsPsych.plugins["html-bn-listen"] = (function() {
             }
             wordsAndProbs.sort((a, b) => (b.prob - a.prob));
             const topGuess = wordsAndProbs[0].word;
-            //console.log(topGuess);
           },
           {
             includeSpectrogram: true,
