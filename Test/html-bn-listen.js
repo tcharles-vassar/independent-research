@@ -201,6 +201,7 @@ jsPsych.plugins["html-bn-listen"] = (function() {
           })
       .then(() => {
         console.log('Stream started');
+        document.getElementById('colorWord').style.display='block';
       })
       .catch(err => {
         console.log('Failed to start streaming: ' + err.message);

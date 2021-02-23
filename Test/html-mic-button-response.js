@@ -108,7 +108,6 @@ jsPsych.plugins["html-mic-button-response"] = (function() {
     }
 
     if(modelLoaded) {
-      //alert("Loaded");
            startListening();
        }else{
          alert("Not Loaded");
@@ -182,25 +181,6 @@ jsPsych.plugins["html-mic-button-response"] = (function() {
 
   };
 
-  //let recognizer;
-  //let words;
-  //const wordList = ["zero","one","two","three","four","five","six","seven","eight","nine", "yes", "no", "up", "down", "left", "right", "stop", "go"];
-
-  //var guessWord = "";
-/*
-  async function loadModel() {
-
-      // When calling `create()`, you must provide the type of the audio input.
-      // - BROWSER_FFT uses the browser's native Fourier transform.
-      recognizer = speechCommands.create("BROWSER_FFT");
-      await recognizer.ensureModelLoaded();
-
-      words = recognizer.wordLabels();
-      modelLoaded = true;
-
-  };
-  */
-
   function startListening() {
      document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn' disabled>Next</button>";
       recognizer.listen(({scores}) => {
@@ -226,15 +206,6 @@ jsPsych.plugins["html-mic-button-response"] = (function() {
     document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn'>Next</button>";
       recognizer.stopListening();
   };
-
-   /* function getResults(correctWord){
-    if(guessWord == correctWord){
-return true;
-   }
-   else{
-    return false;
-    }
-  }; */
 
 
   return plugin;

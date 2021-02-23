@@ -107,6 +107,7 @@ jsPsych.plugins["html-train"] = (function() {
       });
     }
 
+    //function call
     trainNewModel();
 
     // store response
@@ -176,15 +177,15 @@ jsPsych.plugins["html-train"] = (function() {
 
   };
 
-
+//learns from the examples collected and trains to understand new words
 async function trainNewModel(){
-await transferRecognizerTrain.train({
-epochs: 40,
-callback: {
-onEpochEnd: async (epoch, logs) => {
-}
-}
-});
+  await transferRecognizerTrain.train({
+    epochs: 40,
+    callback: {
+      onEpochEnd: async (epoch, logs) => {
+      }
+    }
+  });
 };
 
 return plugin;

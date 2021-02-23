@@ -176,28 +176,33 @@ trainedModel();
 
   };
 
+//After training, during experiment, listen for participant
 async function trainedModel(){
   document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn' disabled>Next</button>";
 await transferRecognizerTrain.listen(({scores}) => {
       const words = transferRecognizerTrain.wordLabels();
 
-        // Everytime the model evaluates a result it will return the scores array
-        // Based on this data we will build a new array with each word and it's corresponding score
+        //build new array with scores from participant words
         scores = Array.from(scores).map((s, i) => ({score: s, word: words[i]}));
 
-        // After that we sort the array by scode descending
+
         scores.sort((s1, s2) => s2.score - s1.score);
 
-        // And we highlight the word with the highest score
-        //const elementId = `word-${scores[0].word}`;
+        //word in array closest to participant word is guessed by the program
         guessWord = scores[0].word;
         stopListening2();
     },
     {
         probabilityThreshold: 0.70
+    })
+
+    .then(() => {
+      document.getElementById('colorWord').style.display='block';
     });
+
 };
 
+//turn off microphone
 function stopListening2(){
   document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn'>Next</button>";
     transferRecognizerTrain.stopListening();

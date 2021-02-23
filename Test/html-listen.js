@@ -107,6 +107,7 @@ jsPsych.plugins["html-listen"] = (function() {
       });
     }
 
+//ensure model is loaded before listening, otherwise send error message
     if(modelLoaded) {
           startTraining();
        }else{
@@ -180,19 +181,21 @@ jsPsych.plugins["html-listen"] = (function() {
 
   };
 
+// activate microphone and collect example of color word
   async function startTraining() {
      document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn' disabled>Next</button>";
       recognizer.listen(result => {
-
         candidateWords = recognizer.wordLabels();
+        //create empty array to hold word scores
         let wordsAndProbs = [];
 
             for (let i = 0; i < candidateWords.length; ++i) {
+              //push the word said by participant and it's score onto the array
               wordsAndProbs.push({ word: candidateWords[i], prob: result.scores[i]});
             }
             wordsAndProbs.sort((a, b) => (b.prob - a.prob));
+            //word with the closest score to the word said by the participant is classified as topGuess
             const topGuess = wordsAndProbs[0].word;
-            //console.log(topGuess);
           },
           {
             includeSpectrogram: true,
@@ -200,17 +203,20 @@ jsPsych.plugins["html-listen"] = (function() {
           })
       .then(() => {
         console.log('Stream started');
+        document.getElementById('colorWord').style.display='block';
       })
       .catch(err => {
         console.log('Failed to start streaming: ' + err.message);
       });
 
+      //collects sound example of the word said by participant
       await transferRecognizerTrain.collectExample(choiceWord);
 
       stopListening();
 
 };
 
+//turn off microphone
   function stopListening(){
     document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn'>Next</button>";
       recognizer.stopListening();
