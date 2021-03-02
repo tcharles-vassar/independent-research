@@ -162,7 +162,7 @@ var timeline = [];
 
   var transfer_bn1 = {
     type: "html-bn-listen",
-    stimulus: '<p id="colorWord" style="font-size: 48px; color:black; display:none;">Please stay silent so that we can capture background noise.</p>',
+    stimulus: '<p>Please stay silent so that we can capture background noise.</p>',
 
     choices: ['Next'],
     margin_vertical: '20px',
@@ -174,6 +174,7 @@ var timeline = [];
 };
     timeline.push(transfer_bn1);
 
+/*
   var transfer_red2 = {
     type: "html-listen",
     stimulus: '<p id="colorWord" style="font-size: 48px; color:black; display:none;">Red</p>',
@@ -275,7 +276,7 @@ timeline.push(transfer_orange2);
 
   var transfer_bn2 = {
     type: "html-bn-listen",
-    stimulus: '<p id="colorWord" style="font-size: 48px; color:black; display:none;>Please stay silent so that we can capture background noise.</p>',
+    stimulus: '<p>Please stay silent so that we can capture background noise.</p>',
 
     choices: ['Next'],
     margin_vertical: '20px',
@@ -390,7 +391,7 @@ timeline.push(transfer_pink3);
 
   var transfer_bn3 = {
     type: "html-bn-listen",
-    stimulus: '<p id="colorWord" style="font-size: 48px; color:black; display:none;">Please stay silent so that we can capture background noise.</p>',
+    stimulus: '<p>Please stay silent so that we can capture background noise.</p>',
 
     choices: ['Next'],
     margin_vertical: '20px',
@@ -505,7 +506,7 @@ timeline.push(transfer_pink4);
 
   var transfer_bn4 = {
     type: "html-bn-listen",
-    stimulus: '<p id="colorWord" style="font-size: 48px; color:black; display:none;">Please stay silent so that we can capture background noise.</p>',
+    stimulus: '<p>Please stay silent so that we can capture background noise.</p>',
 
     choices: ['Next'],
     margin_vertical: '20px',
@@ -620,7 +621,7 @@ timeline.push(transfer_pink5);
 
   var transfer_bn5 = {
     type: "html-bn-listen",
-    stimulus: '<p id="colorWord" style="font-size: 48px; color:black; display:none;">Please stay silent so that we can capture background noise.</p>',
+    stimulus: '<p>Please stay silent so that we can capture background noise.</p>',
 
     choices: ['Next'],
     margin_vertical: '20px',
@@ -734,7 +735,7 @@ timeline.push(transfer_pink6);
 
   var transfer_bn6 = {
     type: "html-bn-listen",
-    stimulus: '<p id="colorWord" style="font-size: 48px; color:black; display:none;">Please stay silent so that we can capture background noise.</p>',
+    stimulus: '<p>Please stay silent so that we can capture background noise.</p>',
 
     choices: ['Next'],
     margin_vertical: '20px',
@@ -847,7 +848,7 @@ timeline.push(transfer_pink7);
 
   var transfer_bn7 = {
     type: "html-bn-listen",
-    stimulus: '<p id="colorWord" style="font-size: 48px; color:black; display:none;">Please stay silent so that we can capture background noise.</p>',
+    stimulus: '<p>Please stay silent so that we can capture background noise.</p>',
 
     choices: ['Next'],
     margin_vertical: '20px',
@@ -961,7 +962,7 @@ timeline.push(transfer_pink8);
 
   var transfer_bn8 = {
     type: "html-bn-listen",
-    stimulus: '<p id="colorWord" style="font-size: 48px; color:black; display:none;">Please stay silent so that we can capture background noise.</p>',
+    stimulus: '<p>Please stay silent so that we can capture background noise.</p>',
 
     choices: ['Next'],
     margin_vertical: '20px',
@@ -971,10 +972,18 @@ timeline.push(transfer_pink8);
     },
   };
 
-  timeline.push(transfer_bn8);
+  timeline.push(transfer_bn8); */
+
+  var wait = {
+    type: "html-train",
+    stimulus: '<p>Please wait while we train the interface.</p>',
+    choices: ['Continue'],
+      margin_vertical: '20px',
+  };
+  timeline.push(wait);
 
   var part_2 = {
-    type: "html-train",
+    type: "html-button-response",
     stimulus: '<p>You have completed the transfer learning part of the experiment.</p>' +
     '<p> You are halfway through the experiment.</p>' +
     '<p>In the following part of the experiment, you will be presented with a series of color words. Please say into your microphone the color of the word, not what the word says.</p>' +
@@ -985,20 +994,6 @@ timeline.push(transfer_pink8);
 
   };
   timeline.push(part_2);
-
-  var trial_1 = {
-    type: 'html-trained',
-    stimulus: '<p id="colorWord" style="font-size: 48px; color: #FF1493; outline: 2px black; display:none;">Red</p>',
-    choices: ['Next'],
-    margin_vertical: '20px',
-
-    on_finish: function(data){
-      data.correct = getResults(newWordList[0]);
-
-    },
-  };
-
-  timeline.push(trial_1);
 
   var trial_2 = {
     type: 'html-trained',
@@ -1013,6 +1008,20 @@ timeline.push(transfer_pink8);
   };
 
   timeline.push(trial_2);
+
+  var trial_1 = {
+    type: 'html-trained',
+    stimulus: '<p id="colorWord" style="font-size: 48px; color: #FF1493; display:none;">Red</p>',
+    choices: ['Next'],
+    margin_vertical: '20px',
+
+    on_finish: function(data){
+      data.correct = getResults(newWordList[0]);
+
+    },
+  };
+
+  timeline.push(trial_1);
 
   var trial_3 = {
     type: 'html-trained',

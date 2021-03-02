@@ -183,6 +183,7 @@ jsPsych.plugins["html-bn-listen"] = (function() {
 
 // function to collect an example of background noise
   async function bnTraining() {
+    alert('bn');
      document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn' disabled>Next</button>";
       recognizer.listen(result => {
 
@@ -201,7 +202,6 @@ jsPsych.plugins["html-bn-listen"] = (function() {
           })
       .then(() => {
         console.log('Stream started');
-        document.getElementById('colorWord').style.display='block';
       })
       .catch(err => {
         console.log('Failed to start streaming: ' + err.message);
@@ -209,11 +209,11 @@ jsPsych.plugins["html-bn-listen"] = (function() {
 
       await transferRecognizerTrain.collectExample(choiceWord);
 
-      setTimeout(stopListening(), 3000);
+      setTimeout(stopListening3(), 3000);
 
 };
 
-  function stopListening(){
+  function stopListening3(){
     document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn'>Next</button>";
       recognizer.stopListening();
   };

@@ -177,16 +177,22 @@ jsPsych.plugins["html-train"] = (function() {
 
   };
 
+
 //learns from the examples collected and trains to understand new words
 async function trainNewModel(){
+   document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn' disabled>Continue</button>";
   await transferRecognizerTrain.train({
     epochs: 40,
     callback: {
       onEpochEnd: async (epoch, logs) => {
       }
     }
+  })
+  .then(() => {
+    document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn'>Continue</button>";
+    alert('Stream started');
   });
-};
+}; 
 
 return plugin;
 })();
