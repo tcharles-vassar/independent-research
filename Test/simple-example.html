@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Experiment</title>
+  <script src="jspsych-6/jspsych.js"></script>
+  <script src="jspsych-6/plugins/jspsych-html-keyboard-response.js"></script>
+  <script src="jspsych-6/plugins/jspsych-html-button-response.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+  <script src = "html-mic-button-load.js"></script>
+  <script src = "html-listen.js"></script>
+  <script src = "simple-example-learn.js"></script>
+  <script src="speech-commands.js"></script>
+  <link href="jspsych-6/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+</head>
+<body></body>
+<script>
+
+var modelLoaded = false;
+let recognizer;
+let transferRecognizerTrain;
+let candidateWords;
+let choiceWord;
+let guessWord;
+
+const newWordList = ["red", "orange", "yellow", "green", "blue", "purple", "pink"];
+const collectExampleOptions = {};
+
+
+function getResults(correctWord){
+  alert("guess: " + guessWord);
+  alert("correctWord: " + correctWord);
+ if(guessWord == correctWord){
+return true;
+ }
+ else{
+ return false;
+ }
+};
+
+  /* create timeline */
+var timeline = [];
+
+  /* define welcome message trial */
+  var welcome = {
+    type: "html-mic-button-load",
+    stimulus: '<p>Welcome to the experiment.</p>' +
+    '<p>You will be presented with a series of color words. Please answer the color of the word, not what the word says.</p>' +
+    '<p>Example, if the background color of the word is GREEN, say GREEN.</p>',
+
+    choices: ['Continue'],
+      margin_vertical: '20px'
+  };
+  timeline.push(welcome);
+
+  var part_1 = {
+    type: "html-button-response",
+    stimulus: '<p>The first half of the experiment will show a series of words on the screen.</p>' +
+    '<p>Please repeat each word that appears into your microphone.</p>' +
+    '<p>There will also be a portion where you are required to stay silent, a sentence will appear on the screen instructing this to you.</p>',
+
+    choices: ['Continue'],
+      margin_vertical: '20px'
+  };
+  timeline.push(part_1);
+
+  var transfer_red1 = {
+    type: "simple-example-learn",
+    stimulus: '<p id="colorWord" style="font-size: 48px; color:black; display:none;">Red</p>',
+
+    choices: ['Next'],
+    margin_vertical: '20px',
+
+    on_start: function(){
+      choiceWord = 'red';
+    },
+};
+    timeline.push(transfer_red1);
+
+
+  var transfer_orange1 = {
+    type: "simple-example-learn",
+    stimulus: '<p id="colorWord" style="font-size: 48px; color:black; display:none;">Orange</p>',
+
+    choices: ['Next'],
+    margin_vertical: '20px',
+
+    on_start: function(){
+      choiceWord = 'orange';
+    },
+};
+    timeline.push(transfer_orange1);
+
+    var transfer_yellow1 = {
+      type: "simple-example-learn",
+      stimulus: '<p id="colorWord" style="font-size: 48px; color:black; display:none;">Yellow</p>',
+
+      choices: ['Next'],
+      margin_vertical: '20px',
+
+      on_start: function(){
+        choiceWord = 'yellow';
+      },
+  };
+    timeline.push(transfer_yellow1);
+
+    var transfer_green1 = {
+      type: "simple-example-learn",
+      stimulus: '<p id="colorWord" style="font-size: 48px; color:black; display:none;">Green</p>',
+
+      choices: ['Next'],
+      margin_vertical: '20px',
+
+      on_start: function(){
+        choiceWord = 'green';
+      },
+  };
+      timeline.push(transfer_green1);
+
+    var transfer_blue1 = {
+      type: "simple-example-learn",
+      stimulus: '<p id="colorWord" style="font-size: 48px; color:black; display:none;">Blue</p>',
+
+      choices: ['Next'],
+      margin_vertical: '20px',
+
+      on_start: function(){
+        choiceWord = 'blue';
+      },
+  };
+      timeline.push(transfer_blue1);
+
+    var debrief = {
+      type: 'html-keyboard-response',
+      stimulus: '<div class="instructions">'+
+      '<p>You have completed the experiment. Thank you for participating!</p>'+
+      '<p><a href="https://app.prolific.co/submissions/complete?cc=5E47AAF9">Click here to finish the experiment and return to Prolific</a>. You do not need a completion code.</p>'+
+      '</div>',
+      choices: jsPsych.NO_KEYS,
+    }
+    timeline.push(debrief);
+
+    /* start the experiment */
+    jsPsych.init({
+      timeline: timeline
+    });
+
+    </script>
+    </html>

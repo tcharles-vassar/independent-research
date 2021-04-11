@@ -1,4 +1,4 @@
-jsPsych.plugins["html-bn-listen"] = (function() {
+jsPsych.plugins["html-listen"] = (function() {
 
   var plugin = {};
 
@@ -107,9 +107,9 @@ jsPsych.plugins["html-bn-listen"] = (function() {
       });
     }
 
-// check to make sure the model is loaded, else send error alert
+//ensure model is loaded before listening, otherwise send error message
     if(modelLoaded) {
-          bnTraining();
+          learnWords();
        }else{
          alert("Not Loaded");
        }
@@ -181,19 +181,29 @@ jsPsych.plugins["html-bn-listen"] = (function() {
 
   };
 
-// function to collect an example of background noise
-  async function bnTraining() {
-    alert('bn');
-     document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn' disabled>Next</button>";
-      /* recognizer.listen(result => {
+async function learnWords(){
+  document.getElementById('jspsych-html-mic-button-response-button-0').addEventListener('mousedown', function (event) {
+ transferRecognizerTrain.collectExample(choiceWord);
+ function end_event(e) {
+   document.removeEventListener('mousedown', move_event);
+ }
+ document.addEventListener('mouseup', end_event);
+})}
 
+// activate microphone and collect example of color word
+  /* async function startTraining() {
+     document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn' disabled>Next</button>";
+      recognizer.listen(result => {
         candidateWords = recognizer.wordLabels();
+        //create empty array to hold word scores
         let wordsAndProbs = [];
 
             for (let i = 0; i < candidateWords.length; ++i) {
+              //push the word said by participant and it's score onto the array
               wordsAndProbs.push({ word: candidateWords[i], prob: result.scores[i]});
             }
             wordsAndProbs.sort((a, b) => (b.prob - a.prob));
+            //word with the closest score to the word said by the participant is classified as topGuess
             const topGuess = wordsAndProbs[0].word;
           },
           {
@@ -202,20 +212,21 @@ jsPsych.plugins["html-bn-listen"] = (function() {
           })
       .then(() => {
         console.log('Stream started');
+        document.getElementById('colorWord').style.display='block';
       })
       .catch(err => {
         console.log('Failed to start streaming: ' + err.message);
-      }); */
+      });
 
+      //collects sound example of the word said by participant
       await transferRecognizerTrain.collectExample(choiceWord);
 
-      stopListening3;
+      turnOffMic();
 
-      //setTimeout(stopListening3, 3000);
+}; */
 
-};
-
-  function stopListening3(){
+//turn off microphone
+  function turnOffMic(){
     document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn'>Next</button>";
       recognizer.stopListening();
   };
