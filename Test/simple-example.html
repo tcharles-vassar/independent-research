@@ -7,7 +7,6 @@
   <script src="jspsych-6/plugins/jspsych-html-button-response.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
   <script src = "html-mic-button-load.js"></script>
-  <script src = "html-listen.js"></script>
   <script src = "simple-example-learn.js"></script>
   <script src="speech-commands.js"></script>
   <link href="jspsych-6/css/jspsych.css" rel="stylesheet" type="text/css"></link>
@@ -21,21 +20,6 @@ let transferRecognizerTrain;
 let candidateWords;
 let choiceWord;
 let guessWord;
-
-const newWordList = ["red", "orange", "yellow", "green", "blue", "purple", "pink"];
-const collectExampleOptions = {};
-
-
-function getResults(correctWord){
-  alert("guess: " + guessWord);
-  alert("correctWord: " + correctWord);
- if(guessWord == correctWord){
-return true;
- }
- else{
- return false;
- }
-};
 
   /* create timeline */
 var timeline = [];

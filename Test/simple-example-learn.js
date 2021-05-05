@@ -1,9 +1,9 @@
-jsPsych.plugins["html-listen"] = (function() {
+jsPsych.plugins["simple-example-learn"] = (function() {
 
   var plugin = {};
 
   plugin.info = {
-    name: 'html-listen',
+    name: 'simple-example-learn',
     description: '',
     parameters: {
       stimulus: {
@@ -120,6 +120,13 @@ jsPsych.plugins["html-listen"] = (function() {
       button: null
     };
 
+    //var myOptions = new transferRecognizerTrain.collectExampleOptions = {durationSec: 1};
+    //var options = new transferRecognizerTrain.collectExampleOptions(durationSec = 1);
+    //myOptions.durationSec = 1;
+    //var options = {durationSec : 1};
+    var options = new transferRecognizerTrain.collectExampleOptions({durationSec : 1});
+
+
     // function to handle responses by the subject
     function after_response(choice) {
 
@@ -181,14 +188,37 @@ jsPsych.plugins["html-listen"] = (function() {
 
   };
 
-async function learnWords(){
+/* async function learnWords(){
   document.getElementById('jspsych-html-mic-button-response-button-0').addEventListener('mousedown', function (event) {
- transferRecognizerTrain.collectExample(choiceWord);
+ await transferRecognizerTrain.collectExample(choiceWord);
  function end_event(e) {
    document.removeEventListener('mousedown', move_event);
  }
  document.addEventListener('mouseup', end_event);
-})}
+})} */
+
+function learnWords() {
+   document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn' disabled>Next</button>";
+   document.getElementById('colorWord').style.display='block';
+   document.addEventListener('keyup', event => {
+     if (event.code === 'Space') {
+       console.log('Space pressed');
+       collect()
+       .then(() => {
+         console.log('Stream started');
+         document.getElementById('jspsych-html-mic-button-response-button-0').innerHTML="<button class='jspsych-btn'>Next</button>";
+       });
+     }
+   });
+}
+
+
+async function collect() {
+
+      await transferRecognizerTrain.collectExample(choiceWord, options);
+     }
+
+
 
 // activate microphone and collect example of color word
   /* async function startTraining() {
